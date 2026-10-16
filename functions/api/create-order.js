@@ -37,7 +37,6 @@ export async function onRequestPost({ request, env }) {
           currency: "INR",
           receipt: `yd_${crypto.randomUUID().replace(/-/g, "").slice(0, 20)}`
         })
-      }
     );
 
     const data = await response.json();
