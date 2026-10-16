@@ -43,10 +43,23 @@ export async function onRequestPost({ request, env }) {
     const data = await response.json();
 
     if (!response.ok) {
-      return Response.json(
-        { error: "Could not create payment order" },
-        { status: 502 }
-      );
+  const errorData = data?.error?.code || "RAZORPAY_API_ERROR";
+  const errorMessage = data?.error?.description || "Payment provider error";
+
+  console.error("Razorpay order creation failed", {
+    status: response.status,
+    code: errorData
+  });
+
+  return Response.json(
+    {
+      error: "Could not create payment order",
+      razorpayStatus: response.status,
+      code: errorData
+    },
+    { status: 502 }
+  );
+}
     }
 
     return Response.json({
